@@ -10,8 +10,12 @@
     <nav class="navbar bg-primary" data-bs-theme="dark">
 
     </nav>
-
-    <form method="post" role="form" th:action="@{/register}" th:object="${user}">
+    <div th:if="${param.success}">
+        <div class="alert alert-info">
+            You have successfully registered our app!
+        </div>
+    </div>
+    <form method="post" role="form" th:action="@{/signup}" th:object="${user}">
 
 
         <div class="mb-3">
@@ -29,6 +33,13 @@
             <input type="email" class="form-control" id="email" name="email" th:field="*{email}" >
             <p th:errors = "*{email}" class="text-danger"
                th:if="${#fields.hasErrors('email')}"></p>
+        </div>
+
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" th:field="*{username}" >
+            <p th:errors = "*{email}" class="text-danger"
+               th:if="${#fields.hasErrors('username')}"></p>
         </div>
 
         <div class="mb-3">

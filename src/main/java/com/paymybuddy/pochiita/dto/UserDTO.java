@@ -33,7 +33,7 @@ public class UserDTO {
     private String email;
 
     private List<com.paymybuddy.pochiita.model.User> friendsList = new ArrayList<>();
-    @NotEmpty
+
     private Account account;
 
 }
