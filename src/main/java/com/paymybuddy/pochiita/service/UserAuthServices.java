@@ -3,6 +3,7 @@ package com.paymybuddy.pochiita.service;
 import com.paymybuddy.pochiita.dto.UserDTO;
 import com.paymybuddy.pochiita.model.Account;
 import com.paymybuddy.pochiita.model.User;
+import com.paymybuddy.pochiita.repository.AccountRepository;
 import com.paymybuddy.pochiita.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
 public class UserAuthServices {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     private final PasswordEncoder passwordEncoder = new PasswordEncoder() {
         @Override
@@ -29,6 +33,7 @@ public class UserAuthServices {
     public Account baseAccountCreation (){
         Account account = new Account();
         account.setBalance(0.0);
+        accountRepository.save(account);
         return account;
     }
     public void signUp (UserDTO userDTO){
