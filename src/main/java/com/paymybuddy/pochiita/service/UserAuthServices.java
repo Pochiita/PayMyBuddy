@@ -29,13 +29,21 @@ public class UserAuthServices {
             return BCrypt.checkpw(rawPassword.toString(), encodedPassword);
         }
     };
-
+    /**
+     * Methods that creates the account that will be linked to a user in db
+     *
+     */
     public Account baseAccountCreation (){
         Account account = new Account();
         account.setBalance(0.0);
         accountRepository.save(account);
         return account;
     }
+
+    /**
+     * Methods that creates the person object in db
+     * @param userDTO
+     */
     public void signUp (UserDTO userDTO){
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
@@ -50,6 +58,8 @@ public class UserAuthServices {
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    
 
 
 }
