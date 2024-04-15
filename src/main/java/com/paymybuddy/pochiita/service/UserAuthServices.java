@@ -6,9 +6,13 @@ import com.paymybuddy.pochiita.model.User;
 import com.paymybuddy.pochiita.repository.AccountRepository;
 import com.paymybuddy.pochiita.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserAuthServices {
@@ -55,11 +59,19 @@ public class UserAuthServices {
         userRepository.save(user);
     }
 
+    public boolean checkLogin(String email, String password){
+            // TODO Auto-generated method stub
+            User user = userRepository.findByEmail(email);
+            if (user != null) {
+                if (passwordEncoder.matches(password, user.getPassword())) {
+                    return true;
+                }
+            }
+            return false;
+
+    }
+
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
-    
-
-
 }
