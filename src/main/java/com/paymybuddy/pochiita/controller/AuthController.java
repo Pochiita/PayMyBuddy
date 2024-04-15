@@ -60,22 +60,5 @@ public class AuthController {
         return "login";
     }
 
-    @PostMapping ("/checklogin")
-    public RedirectView loginPost(HttpServletRequest request, @RequestParam("mail") String mail, @RequestParam("password") String password, RedirectAttributes redirectAttributes){
-        boolean isCheckable = userAuthServices.checkLogin(mail,password);
-        if (isCheckable) {
-            if (SecurityContextHolder.getContext().getAuthentication() == null ||
-                    SecurityContextHolder.getContext()
-                            .getAuthentication().getClass().equals(AnonymousAuthenticationToken.class)) {
-                UsernamePasswordAuthenticationToken token =
-                        new UsernamePasswordAuthenticationToken(mail, password,new ArrayList<>());
-                SecurityContextHolder.getContext().setAuthentication(token);
-            }
-            redirectAttributes.addFlashAttribute("message", "Login Successful");
-            return new RedirectView("hello");
 
-        }
-        redirectAttributes.addFlashAttribute("message", "Invalid Username or Password");
-        return new RedirectView("login");
-    }
 }
