@@ -10,7 +10,7 @@
     <form
             method="post"
             role="form"
-            th:action="@{/checklogin}"
+            action="/login"
             class="form-horizontal"
     >
         <div th:if="${message}" class="alert alert-error">
@@ -20,8 +20,8 @@
             <label class="control-label"> Email</label>
             <input
                     type="text"
-                    id="mail"
-                    name="mail"
+                    id="username"
+                    name="username"
                     class="form-control"
                     placeholder="Enter mail address"
             />
