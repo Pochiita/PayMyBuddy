@@ -20,8 +20,8 @@
             </ul>
         </div>
 
-        <div class="w-25">
-            <div class="dropdown text-end">
+        <div class="">
+            <div class="dropstart mx-3">
                 <a class="d-block link-body-emphasis text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="https://wallpapers-clan.com/wp-content/uploads/2023/01/chainsaw-man-pochita-pfp-10.jpg" alt="mdo" width="32" height="32" class="rounded-circle">
                 </a>
@@ -41,7 +41,7 @@
                     You have successfully registered our app!
                 </div>
             </div>
-            <form method="post" role="form" th:action="@{/signup}" th:object="${user}">
+            <form method="post" role="form" th:action="@{/signup}" th:object="${user}" class="my-5">
 
 
                 <div class="mb-3">
