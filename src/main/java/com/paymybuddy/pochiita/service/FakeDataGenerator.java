@@ -2,6 +2,7 @@ package com.paymybuddy.pochiita.service;
 
 import com.github.javafaker.Faker;
 import com.paymybuddy.pochiita.dto.UserDTO;
+import com.paymybuddy.pochiita.model.User;
 import com.paymybuddy.pochiita.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class FakeDataGenerator {
     @PostConstruct
     public void generateData (){
         Integer nbrUsers  = Math.toIntExact(userRepository.count());
+
+        User user = userRepository.findByEmail("test@test.com");
+        System.out.println(user.getAccount().getBalance());
         if (nbrUsers < 10){
             for(int i = 0;i<10-nbrUsers;i++){
                 UserDTO userDTO = new UserDTO();
