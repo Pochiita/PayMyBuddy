@@ -2,12 +2,14 @@ package com.paymybuddy.pochiita.service;
 
 import com.paymybuddy.pochiita.model.User;
 import com.paymybuddy.pochiita.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.AccountException;
 import java.security.Principal;
 @Service
+@Transactional
 public class PersonnalInfoService {
 
     @Autowired

@@ -19,7 +19,7 @@ public class Account {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Transaction> transactionList = new ArrayList<>();
     private double balance;
 

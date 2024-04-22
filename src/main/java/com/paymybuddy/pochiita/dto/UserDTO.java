@@ -18,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 public class UserDTO {
 
-    private Long id;
 
     @NotEmpty
     private String password;
@@ -32,8 +31,6 @@ public class UserDTO {
     @Email
     private String email;
 
-    private List<com.paymybuddy.pochiita.model.User> friendsList = new ArrayList<>();
 
-    private Account account;
 
 }

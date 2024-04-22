@@ -23,16 +23,10 @@ public class Transaction {
     private User receiver;
 
     @Column(nullable = false)
-    private Boolean isFinished;
-
-    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
     private double amount;
-
-    @Column(nullable = false)
-    private double fee;
 
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
