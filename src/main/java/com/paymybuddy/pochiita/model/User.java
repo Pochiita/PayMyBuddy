@@ -1,11 +1,14 @@
 package com.paymybuddy.pochiita.model;
 
+import com.paymybuddy.pochiita.repository.UserRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -32,8 +35,10 @@ public class User {
     private String email;
     @OneToMany
     private List<User> friendsList = new ArrayList<>();
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name ="person_id", nullable = false)
     private Account account;
+
+
 
 }

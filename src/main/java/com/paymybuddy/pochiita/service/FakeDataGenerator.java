@@ -3,8 +3,10 @@ package com.paymybuddy.pochiita.service;
 import com.github.javafaker.Faker;
 import com.paymybuddy.pochiita.dto.TransactionDTO;
 import com.paymybuddy.pochiita.dto.UserDTO;
+import com.paymybuddy.pochiita.model.Account;
 import com.paymybuddy.pochiita.model.Transaction;
 import com.paymybuddy.pochiita.model.User;
+import com.paymybuddy.pochiita.repository.AccountRepository;
 import com.paymybuddy.pochiita.repository.TransactionRepository;
 import com.paymybuddy.pochiita.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
@@ -26,11 +28,14 @@ public class FakeDataGenerator {
     private UserRepository userRepository;
 
     @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
     private TransactionRepository transactionRepository;
 
     Faker faker = new Faker(new Locale("fr-FR"));
 
-    @PostConstruct
+   @PostConstruct
     public void generateData (){
         Integer nbrUsers  = Math.toIntExact(userRepository.count());
 
@@ -47,19 +52,33 @@ public class FakeDataGenerator {
                 userAuthServices.signUp(userDTO);
             }
         }
+    /*if (user != null && coming_user !=null) {
+        Transaction toTest = new Transaction();
+       Account accountUser = user.getAccount();
+       Account comingUser = coming_user.getAccount();
 
-        List<Transaction> transactionList = user.getAccount().getTransactionList();
-        System.out.println(transactionList);
+        toTest.setDescription(faker.pokemon().name());
+        toTest.setDebtor(coming_user);
+        toTest.setReceiver(user);
+        toTest.setAmount(1.00);
+        System.out.println(accountUser.getTransactionList().size());
+        accountUser.getTransactionList().add(toTest);
+        comingUser.getTransactionList().add(toTest);
+        accountRepository.save(accountUser);
+        accountRepository.save(comingUser);
 
-            Transaction transaction = new Transaction();
-            transaction.setDescription(faker.rickAndMorty().quote());
-            transaction.setDebtor(coming_user);
-            transaction.setReceiver(user);
-            transaction.setAmount(1.00);
-            transaction.setAccount(user.getAccount());
-            transactionRepository.save(transaction);
+
+        Transaction fromTest = new Transaction();
 
 
+        System.out.println(accountUser.getTransactionList().size());
+
+
+        System.out.println(accountUser.getTransactionList().size());
+
+
+
+    */
     }
 
 
