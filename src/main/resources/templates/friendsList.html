@@ -35,6 +35,16 @@
         </div>
     </div>
 </nav>
+<div th:if="${param.success}">
+    <div class="alert alert-info">
+        The user have been successfully added to your friends list.
+    </div>
+</div>
+<div th:if="${param.fail}">
+    <div class="alert alert-info">
+        The user couldn't be added to your friends list .Please try later
+    </div>
+</div>
 <div class="container mt-4">
     <div class="d-flex justify-content-between">
 
@@ -50,7 +60,7 @@
                             <div th:text="${user_available.lastName}" class="ml-2"></div>
                         </div>
                         <div>
-                            <div><a class="btn btn-primary" th:href="@{/profile/friendslist/add}" role="button">Link</a></div>
+                            <div><a class="btn btn-primary" th:href="@{/profile/friendslist/add(f=${user_available.id})}" role="button">Link</a></div>
                         </div>
                     </div>
                 </div>

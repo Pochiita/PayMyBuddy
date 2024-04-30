@@ -6,12 +6,15 @@ import com.paymybuddy.pochiita.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FriendsService {
@@ -27,13 +30,26 @@ public class FriendsService {
         }
         return user;
     }
-    public void addAFriend(User baseUser,User toBeAdded) throws Exception {
-        List<User> friendsList = baseUser.getFriendsList();
-        if (!friendsList.contains(baseUser)) {
-            friendsList.add(toBeAdded);
-            userRepository.save(baseUser);
+    public boolean addAFriend(long friend_id) throws Exception {
+
+        String username = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username=((UserDetails) principal).getUsername();
+        }
+
+        User user = userRepository.findByEmail(username);
+        Optional<User> optional_to_add = userRepository.findById(friend_id);
+
+
+        if ( user != null && optional_to_add.isPresent()){
+            User to_add_verified = optional_to_add.orElseThrow();
+            List<User> friendlist = user.getFriendsList();
+            friendlist.add(to_add_verified);
+            userRepository.save(user);
+            return true;
         }else{
-            throw new Exception("L'utilisateur est déja dans votre liste d'amis");
+            return false;
         }
     }
 
@@ -60,6 +76,8 @@ public class FriendsService {
         }
 
         available_indexes.put("current",actual_page);
+        System.out.println(actual_page);
+        System.out.println(max_offset);
 
         if (actual_page < max_offset){
             available_indexes.put("next",actual_page+1);
