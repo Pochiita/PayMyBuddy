@@ -6,6 +6,8 @@ import com.paymybuddy.pochiita.service.FriendsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +32,18 @@ public class FriendController {
             List<User> avalaible_friends = friendsService.listOfAvailableFriend(user,page,limit);
             model.addAttribute("user", user);
             model.addAttribute("available_friends",avalaible_friends);
+            model.addAttribute("pagination",friendsService.handlePagination(page,limit, (int) userRepository.count()));
             return "friendsList";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/profile/friendslist/add")
+    public String addingAFriend (){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object user = auth.getPrincipal();
+        System.out.println(user);
+        return "redirect:/signup?success";
     }
 }

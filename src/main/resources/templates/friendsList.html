@@ -45,37 +45,35 @@
 
                 <div th:each="user_available: ${available_friends}">
                     <div class="d-flex justify-content-between">
-                        <div class="credentials d-flex">
+                        <div class="credentials d-flex ">
                             <div th:text="${user_available.firstName}"></div>
-                            <div th:text="${user_available.lastName}"></div>
+                            <div th:text="${user_available.lastName}" class="ml-2"></div>
                         </div>
                         <div>
-                            <div><a class="btn btn-primary" th:href="@{/profile/friendslist(limit=20,page=0)}" role="button">Link</a></div>
+                            <div><a class="btn btn-primary" th:href="@{/profile/friendslist/add}" role="button">Link</a></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div th:if="${param.page != null}">
-        <nav aria-label="...">
-            <ul class="pagination">
-                <li th:if="${param.page >0}" class="page-item">
-                    <a class="page-link">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
 
 </div>
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li th:if="${pagination.containsKey('prev')}" class="page-item">
+                <a class="page-link" th:text="${pagination.prev + 1}"></a>
+            </li>
+
+
+            <li class="page-item active" aria-current="page" th:if="${pagination.current !=null}">
+                <a class="page-link" th:text="${pagination.current + 1}" href="#">2</a>
+            </li>
+            <li th:if="${pagination.next != null}" class="page-item">
+                <a class="page-link" th:text="${pagination.next + 1}"></a>
+            </li>
+        </ul>
+    </nav>
 </body>
 </html>
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -51,17 +52,17 @@ public class FriendsService {
         return list;
     }
 
-    public List<Integer> handlePagination (int actual_page,int offset,int totalElts){
+    public HashMap<String, Integer> handlePagination (int actual_page, int offset, int totalElts){
         int max_offset = (int) Math.ceil(totalElts /offset);
-        List<Integer> available_indexes = new ArrayList<>();
+        HashMap<String,Integer> available_indexes = new HashMap<>();
         if (actual_page >0){
-            available_indexes.add(actual_page-1);
+           available_indexes.put("prev",actual_page-1);
         }
 
-        available_indexes.add(actual_page);
+        available_indexes.put("current",actual_page);
 
         if (actual_page < max_offset){
-            available_indexes.add(actual_page+1);
+            available_indexes.put("next",actual_page+1);
         }
 
         return available_indexes;
