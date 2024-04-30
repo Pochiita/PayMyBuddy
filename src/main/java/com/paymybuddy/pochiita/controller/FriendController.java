@@ -23,14 +23,13 @@ public class FriendController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/profile/friendsList")
+    @GetMapping("/profile/friendslist")
     public String friendsList (Principal principal, Model model,@RequestParam(value = "limit") int limit,@RequestParam(value = "page") int page){
         try {
             User user = friendsService.getUser(principal);
-            Page<User> friends = userRepository.findAll(PageRequest.of(page, limit));
-            System.out.println(friends);
+            List<User> avalaible_friends = friendsService.listOfAvailableFriend(user,page,limit);
             model.addAttribute("user", user);
-
+            model.addAttribute("available_friends",avalaible_friends);
             return "friendsList";
         } catch (Exception e) {
             throw new RuntimeException(e);

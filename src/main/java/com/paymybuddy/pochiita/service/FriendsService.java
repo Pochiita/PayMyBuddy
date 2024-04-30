@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,7 +47,23 @@ public class FriendsService {
     }
 
     public List<User> listOfAvailableFriend(User user,int page, int limit){
-        Page<User> AllUsers = userRepository.findAll(PageRequest.of(page, limit));
+        List<User> list = userRepository.findAllUsersNotInFriendListAndNotOwnUser(user.getId(),user.getId(),PageRequest.of(page, limit));
+        return list;
+    }
 
+    public List<Integer> handlePagination (int actual_page,int offset,int totalElts){
+        int max_offset = (int) Math.ceil(totalElts /offset);
+        List<Integer> available_indexes = new ArrayList<>();
+        if (actual_page >0){
+            available_indexes.add(actual_page-1);
+        }
+
+        available_indexes.add(actual_page);
+
+        if (actual_page < max_offset){
+            available_indexes.add(actual_page+1);
+        }
+
+        return available_indexes;
     }
 }
