@@ -34,7 +34,7 @@ public class FriendController {
             List<User> avalaible_friends = friendsService.listOfAvailableFriend(user,page,limit);
             model.addAttribute("user", user);
             model.addAttribute("available_friends",avalaible_friends);
-            model.addAttribute("pagination",friendsService.handlePagination(page,limit, (int) userRepository.count()));
+            model.addAttribute("pagination",friendsService.handlePagination(page,limit, avalaible_friends.size()));
             return "friendsList";
         } catch (Exception e) {
             throw new RuntimeException(e);

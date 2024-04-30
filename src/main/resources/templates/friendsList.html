@@ -77,9 +77,9 @@
 
 
             <li class="page-item active" aria-current="page" th:if="${pagination.current !=null}">
-                <a class="page-link" th:text="${pagination.current + 1}" href="#">2</a>
+                <a class="page-link" th:text="${pagination.current + 1}" href="#"></a>
             </li>
-            <li th:if="${pagination.next != null}" class="page-item">
+            <li th:if="${pagination.containsKey('next')}" class="page-item">
                 <a class="page-link" th:text="${pagination.next + 1}"></a>
             </li>
         </ul>
