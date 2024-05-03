@@ -37,12 +37,12 @@
 </nav>
 <div th:if="${param.success}">
     <div class="alert alert-info">
-        The user have been successfully added to your friends list.
+        The user have been successfully deleted from your friends list.
     </div>
 </div>
 <div th:if="${param.fail}">
     <div class="alert alert-info">
-        The user couldn't be added to your friends list .Please try later
+        The user couldn't be deleted from your friends list .Please try later
     </div>
 </div>
 <div class="container mt-4">
@@ -50,17 +50,19 @@
 
 
         <div class="shadow rounded m-3 p-3 w-50">
-            <p class="my-3">Add a friend</p>
+            <p>Friends List</p>
             <div class="list-group list-group-flush border-bottom scrollarea">
 
-                <div th:each="user_available: ${available_friends}">
+                <div th:each="friend: ${user.friendsList}">
                     <div class="d-flex justify-content-between">
                         <div class="credentials d-flex ">
-                            <div th:text="${user_available.firstName}"></div>
-                            <div th:text="${user_available.lastName}" class="ml-2"></div>
+                            <div th:text="${friend.firstName}"></div>&nbsp;
+                            <div th:text="${friend.lastName}" class="ml-2"></div>
                         </div>
-                        <div>
-                            <div><a class="btn btn-primary" th:href="@{/profile/friendslist/add(f=${user_available.id})}" role="button">Add</a></div>
+                        <div class="d-flex">
+                            <div><a class="btn btn-primary"  role="button">Send money</a></div>
+
+                            <div><a class="btn btn-danger ml-2" th:href="@{/profile/friendslist/remove(f=${friend.id})}"  role="button">Remove</a></div>
                         </div>
                     </div>
                 </div>
@@ -69,21 +71,7 @@
     </div>
 
 </div>
-    <nav aria-label="...">
-        <ul class="pagination">
-            <li th:if="${pagination.containsKey('prev')}" class="page-item">
-                <a class="page-link" th:text="${pagination.prev + 1}"></a>
-            </li>
 
-
-            <li class="page-item active" aria-current="page" th:if="${pagination.current !=null}">
-                <a class="page-link" th:text="${pagination.current + 1}" href="#"></a>
-            </li>
-            <li th:if="${pagination.containsKey('next')}" class="page-item">
-                <a class="page-link" th:text="${pagination.next + 1}"></a>
-            </li>
-        </ul>
-    </nav>
 </body>
 </html>
 

@@ -27,6 +27,17 @@ public class FriendController {
     @Autowired
     UserRepository userRepository;
 
+    @GetMapping("/profile/friends")
+    public String friends (Principal principal, Model model){
+        try {
+            User user = friendsService.getUser(principal);
+            model.addAttribute("user", user);
+
+            return "friends";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     @GetMapping("/profile/friendslist")
     public String friendsList (Principal principal, Model model,@RequestParam(value = "limit") int limit,@RequestParam(value = "page") int page){
         try {
@@ -34,7 +45,8 @@ public class FriendController {
             List<User> avalaible_friends = friendsService.listOfAvailableFriend(user,page,limit);
             model.addAttribute("user", user);
             model.addAttribute("available_friends",avalaible_friends);
-            model.addAttribute("pagination",friendsService.handlePagination(page,limit, avalaible_friends.size()));
+            model.addAttribute("pagination",friendsService.handlePagination(page,limit, avalaible_friends.size()
+            ));
             return "friendsList";
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -50,6 +62,19 @@ public class FriendController {
 
         }else{
             return "redirect:/profile/friendslist?fail&page=0&limit=10";
+
+        }
+    }
+
+    @GetMapping("/profile/friendslist/remove")
+    public String revovingAFriend (@RequestParam(value="f") long friend_id) throws Exception {
+        Boolean response = friendsService.removeAFriend(friend_id);
+
+        if (response){
+            return "redirect:/profile/friends?success";
+
+        }else{
+            return "redirect:/profile/friends?fail";
 
         }
     }

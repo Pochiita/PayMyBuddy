@@ -46,20 +46,39 @@ public class FriendsService {
             User to_add_verified = optional_to_add.orElseThrow();
             List<User> friendlist = user.getFriendsList();
             friendlist.add(to_add_verified);
+            List<User> friend_to_added = to_add_verified.getFriendsList();
+            friend_to_added.add(user);
             userRepository.save(user);
+            userRepository.save(to_add_verified);
             return true;
         }else{
             return false;
         }
     }
 
-    public void removeAFriend(User baseUser, User toBeRemoved) throws Exception {
-        List<User> friendsList = baseUser.getFriendsList();
-        if (friendsList.contains(toBeRemoved)) {
-            friendsList.remove(toBeRemoved);
-            userRepository.save(baseUser);
+    public boolean removeAFriend(long friend_id) throws Exception {
+
+        String username = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username=((UserDetails) principal).getUsername();
+        }
+
+        User user = userRepository.findByEmail(username);
+        Optional<User> optional_to_add = userRepository.findById(friend_id);
+
+
+        if ( user != null && optional_to_add.isPresent()){
+            User to_add_verified = optional_to_add.orElseThrow();
+            List<User> friendlist = user.getFriendsList();
+            friendlist.remove(to_add_verified);
+            List<User> friend_to_added = to_add_verified.getFriendsList();
+            friend_to_added.remove(user);
+            userRepository.save(user);
+            userRepository.save(to_add_verified);
+            return true;
         }else{
-            throw new Exception("L'utilisateur n'est pas dans votre liste d'amis");
+            return false;
         }
     }
 
