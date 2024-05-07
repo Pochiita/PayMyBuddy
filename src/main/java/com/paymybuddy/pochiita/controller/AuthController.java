@@ -2,30 +2,21 @@ package com.paymybuddy.pochiita.controller;
 
 import com.paymybuddy.pochiita.dto.UserDTO;
 import com.paymybuddy.pochiita.model.User;
-import com.paymybuddy.pochiita.service.UserAuthServices;
-import jakarta.servlet.http.HttpServletRequest;
+import com.paymybuddy.pochiita.service.UserAuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
-
-import java.util.ArrayList;
 
 @Controller
 public class AuthController {
 
     @Autowired
-    private UserAuthServices userAuthServices;
+    private UserAuthService userAuthService;
 
     @GetMapping("/signup")
     public String signup(Model model){
@@ -37,7 +28,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public String signUpCreate(Model model, @Valid @ModelAttribute("user") UserDTO userDTO, BindingResult result){
-        User existsUser = userAuthServices.findUserByEmail(userDTO.getEmail());
+        User existsUser = userAuthService.findUserByEmail(userDTO.getEmail());
 
         if (existsUser != null) {
             result.rejectValue("email", null,
@@ -49,7 +40,7 @@ public class AuthController {
             return "/signup";
         }
 
-        userAuthServices.signUp(userDTO);
+        userAuthService.signUp(userDTO);
         return "redirect:/signup?success";
 
     }

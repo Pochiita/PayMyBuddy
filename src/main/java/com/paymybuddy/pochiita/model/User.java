@@ -33,7 +33,7 @@ public class User {
     private String username;
     @Column(nullable = false)
     private String email;
-    @OneToMany
+    @ManyToMany
     private List<User> friendsList = new ArrayList<>();
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name ="person_id", nullable = false)

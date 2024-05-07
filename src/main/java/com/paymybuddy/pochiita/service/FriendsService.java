@@ -95,8 +95,6 @@ public class FriendsService {
         }
 
         available_indexes.put("current",actual_page);
-        System.out.println(actual_page);
-        System.out.println(max_offset);
 
         if (actual_page < max_offset){
             available_indexes.put("next",actual_page+1);

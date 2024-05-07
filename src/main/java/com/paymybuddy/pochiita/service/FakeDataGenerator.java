@@ -1,10 +1,7 @@
 package com.paymybuddy.pochiita.service;
 
 import com.github.javafaker.Faker;
-import com.paymybuddy.pochiita.dto.TransactionDTO;
 import com.paymybuddy.pochiita.dto.UserDTO;
-import com.paymybuddy.pochiita.model.Account;
-import com.paymybuddy.pochiita.model.Transaction;
 import com.paymybuddy.pochiita.model.User;
 import com.paymybuddy.pochiita.repository.AccountRepository;
 import com.paymybuddy.pochiita.repository.TransactionRepository;
@@ -14,7 +11,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Locale;
 
 @Component
@@ -22,7 +18,7 @@ import java.util.Locale;
 public class FakeDataGenerator {
 
     @Autowired
-    private UserAuthServices userAuthServices;
+    private UserAuthService userAuthService;
 
     @Autowired
     private UserRepository userRepository;
@@ -49,7 +45,7 @@ public class FakeDataGenerator {
                 userDTO.setEmail(faker.internet().safeEmailAddress());
                 userDTO.setPassword(faker.internet().password());
                 userDTO.setUsername(faker.pokemon().name());
-                userAuthServices.signUp(userDTO);
+                userAuthService.signUp(userDTO);
             }
         }
     /*if (user != null && coming_user !=null) {
