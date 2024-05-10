@@ -60,7 +60,7 @@
                             <div th:text="${friend.lastName}" class="ml-2"></div>
                         </div>
                         <div class="d-flex">
-                            <div><a class="btn btn-primary"  role="button">Send money</a></div>
+                            <div><a class="btn btn-primary"  th:href="@{/profile/transactionadd(f=${friend.id})}" role="button">Send money</a></div>
 
                             <div><a class="btn btn-danger ml-2" th:href="@{/profile/friendslist/remove(f=${friend.id})}"  role="button">Remove</a></div>
                         </div>

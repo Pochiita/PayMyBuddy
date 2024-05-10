@@ -16,6 +16,7 @@ public class Transaction {
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
     private User debtor;
 

@@ -67,7 +67,7 @@ public class FakeDataGenerator {
         Transaction fromTest = new Transaction();
 
 
-        System.out.println(accountUser.getTransactionList().size());
+         System.out.println(accountUser.getTransactionList().size());
 
 
         System.out.println(accountUser.getTransactionList().size());
