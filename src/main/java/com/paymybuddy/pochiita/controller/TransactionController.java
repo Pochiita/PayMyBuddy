@@ -1,5 +1,6 @@
 package com.paymybuddy.pochiita.controller;
 
+import com.paymybuddy.pochiita.dto.TransactionAddBalanceDTO;
 import com.paymybuddy.pochiita.dto.TransactionAddDTO;
 import com.paymybuddy.pochiita.dto.UserDTO;
 import com.paymybuddy.pochiita.service.TransactionService;
@@ -46,5 +47,49 @@ public class TransactionController {
 
         }
 
+    }
+
+    @GetMapping("/profile/transaction/balance/add" )
+    public String transaction_add_balance (Model model){
+        TransactionAddBalanceDTO transactionAddBalanceDTO = new TransactionAddBalanceDTO();
+        model.addAttribute("transaction",transactionAddBalanceDTO);
+        return "transactionAddBalance.html";
+    }
+
+    @PostMapping("/profile/transaction/balance/add" )
+    public String transaction_add_balance_treatment (Model model, @Valid @ModelAttribute("transaction") TransactionAddBalanceDTO transactionAddDTO, BindingResult result){
+
+        if (result.hasErrors() || result.hasFieldErrors()){
+            model.addAttribute("transaction",transactionAddDTO);
+            return "transactionAddBalance.html";
+        }
+
+        if(transactionService.add_money(transactionAddDTO)){
+            return "redirect:/profile/transaction/balance/add?success";
+        }else{
+            return "redirect:/profile/transaction/balance/add?fail";
+        }
+    }
+
+    @GetMapping("/profile/transaction/balance/receive" )
+    public String transaction_receive_balance (Model model){
+        TransactionAddBalanceDTO transactionAddBalanceDTO = new TransactionAddBalanceDTO();
+        model.addAttribute("transaction",transactionAddBalanceDTO);
+        return "transactionAddBalance.html";
+    }
+
+    @PostMapping("/profile/transaction/balance/receive" )
+    public String transaction_receive_balance_treatment (Model model, @Valid @ModelAttribute("transaction") TransactionAddBalanceDTO transactionAddDTO, BindingResult result){
+
+        if (result.hasErrors() || result.hasFieldErrors()){
+            model.addAttribute("transaction",transactionAddDTO);
+            return "transactionAddBalance.html";
+        }
+
+        if(transactionService.receive_money(transactionAddDTO)){
+            return "redirect:/profile/transaction/balance/receive?success";
+        }else{
+            return "redirect:/profile/transaction/balance/receive?fail";
+        }
     }
 }

@@ -1,16 +1,17 @@
 package com.paymybuddy.pochiita.service;
 
-import com.paymybuddy.pochiita.dto.TransactionAddDTO;
-import com.paymybuddy.pochiita.dto.TransactionCreateDTO;
+import com.paymybuddy.pochiita.dto.TransactionAddBalanceDTO;
 import com.paymybuddy.pochiita.model.Transaction;
 import com.paymybuddy.pochiita.model.User;
 import com.paymybuddy.pochiita.repository.AccountRepository;
 import com.paymybuddy.pochiita.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,6 @@ public class TransactionService {
         if (principal instanceof UserDetails) {
             username=((UserDetails) principal).getUsername();
         }
-        System.out.println(username);
         User user = userRepository.findByEmail(username);
 
         if (user.getAccount().getBalance() < amount){
@@ -49,9 +49,6 @@ public class TransactionService {
         User user = userRepository.findByEmail(username);
         Optional<User> optional_to_add = userRepository.findById(receiver_id);
 
-        if (user.getAccount().getBalance()<amount){
-
-        }
         if ( user != null && optional_to_add.isPresent()){
             User to_add_verified = optional_to_add.orElseThrow();
 
@@ -91,5 +88,57 @@ public class TransactionService {
 
         userRepository.save(receiver);
         userRepository.save(debiter);
+    }
+
+    public boolean add_money(TransactionAddBalanceDTO transactionAddBalanceDTO){
+        String username = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username=((UserDetails) principal).getUsername();
+        }
+
+        User user = userRepository.findByEmail(username);
+        if (user != null){
+            Transaction transaction = new Transaction();
+            transaction.setAmount(transactionAddBalanceDTO.getAmount());
+            transaction.setDescription("Added credit" + LocalDate.now());
+            transaction.setReceiver(user);
+            transaction.setDebtor(null);
+
+            add_transaction_to_user(user,transaction);
+
+            user.getAccount().setBalance(user.getAccount().getBalance()+(transactionAddBalanceDTO.getAmount()*0.95));
+            userRepository.save(user);
+
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean receive_money(TransactionAddBalanceDTO transactionAddBalanceDTO){
+        String username = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username=((UserDetails) principal).getUsername();
+        }
+
+        User user = userRepository.findByEmail(username);
+        if (user != null){
+            Transaction transaction = new Transaction();
+            transaction.setAmount(transactionAddBalanceDTO.getAmount());
+            transaction.setDescription("Added credit" + LocalDate.now());
+            transaction.setReceiver(user);
+            transaction.setDebtor(null);
+
+            add_transaction_to_user(user,transaction);
+
+            user.getAccount().setBalance(user.getAccount().getBalance()-(transactionAddBalanceDTO.getAmount()*0.95));
+            userRepository.save(user);
+
+            return true;
+        }else{
+            return false;
+        }
     }
 }
