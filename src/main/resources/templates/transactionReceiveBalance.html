@@ -45,13 +45,18 @@
         The transaction couldn't be created .Please try later
     </div>
 </div>
+<div th:if="${param.amount}">
+    <div class="alert alert-danger">
+        Not enough money on your account to create this transaction.
+    </div>
+</div>
 <div class="container mt-4">
     <div class="d-flex justify-content-between">
 
 
 
         <div class="shadow rounded m-3 p-3 w-50">
-            <p>Friends List</p>
+            <p>Receive money</p>
             <div class="list-group list-group-flush border-bottom scrollarea">
 
                 <form method="post" role="form" th:action="@{/profile/transaction/balance/receive}" th:object="${transaction}" class="my-5">

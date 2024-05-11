@@ -75,7 +75,7 @@ public class TransactionController {
     public String transaction_receive_balance (Model model){
         TransactionAddBalanceDTO transactionAddBalanceDTO = new TransactionAddBalanceDTO();
         model.addAttribute("transaction",transactionAddBalanceDTO);
-        return "transactionAddBalance.html";
+        return "transactionReceiveBalance.html";
     }
 
     @PostMapping("/profile/transaction/balance/receive" )
@@ -83,7 +83,11 @@ public class TransactionController {
 
         if (result.hasErrors() || result.hasFieldErrors()){
             model.addAttribute("transaction",transactionAddDTO);
-            return "transactionAddBalance.html";
+            return "transactionReceiveBalance.html";
+        }
+
+        if (!transactionService.is_transaction_possible(transactionAddDTO.getAmount())){
+            return "redirect:/profile/transaction/balance/receive?amount";
         }
 
         if(transactionService.receive_money(transactionAddDTO)){

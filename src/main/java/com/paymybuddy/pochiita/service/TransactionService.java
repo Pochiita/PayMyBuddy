@@ -83,7 +83,7 @@ public class TransactionService {
         double receiver_balance = receiver.getAccount().getBalance();
         double debiter_balance = debiter.getAccount().getBalance();
 
-        receiver.getAccount().setBalance(receiver_balance+(amount*0.95));
+        receiver.getAccount().setBalance(receiver_balance+(amount*0.995));
         debiter.getAccount().setBalance(debiter_balance-(amount));
 
         userRepository.save(receiver);
@@ -107,7 +107,7 @@ public class TransactionService {
 
             add_transaction_to_user(user,transaction);
 
-            user.getAccount().setBalance(user.getAccount().getBalance()+(transactionAddBalanceDTO.getAmount()*0.95));
+            user.getAccount().setBalance(user.getAccount().getBalance()+(transactionAddBalanceDTO.getAmount()*0.995));
             userRepository.save(user);
 
             return true;
@@ -128,12 +128,12 @@ public class TransactionService {
             Transaction transaction = new Transaction();
             transaction.setAmount(transactionAddBalanceDTO.getAmount());
             transaction.setDescription("Added credit" + LocalDate.now());
-            transaction.setReceiver(user);
-            transaction.setDebtor(null);
+            transaction.setReceiver(null);
+            transaction.setDebtor(user);
 
             add_transaction_to_user(user,transaction);
 
-            user.getAccount().setBalance(user.getAccount().getBalance()-(transactionAddBalanceDTO.getAmount()*0.95));
+            user.getAccount().setBalance(user.getAccount().getBalance()-transactionAddBalanceDTO.getAmount());
             userRepository.save(user);
 
             return true;

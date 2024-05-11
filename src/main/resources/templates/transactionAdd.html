@@ -45,9 +45,9 @@
         The transaction couldn't be created .Please try later
     </div>
 </div>
-<div th:if="${param.ammount}">
-    <div class="alert danger">
-        Not enough credit on your account to create this transaction.
+<div th:if="${param.amount}">
+    <div class="alert alert-danger">
+        Not enough money on your account to create this transaction.
     </div>
 </div>
 <div class="container mt-4">

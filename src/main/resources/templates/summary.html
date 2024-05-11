@@ -52,30 +52,43 @@
             <div class="list-group list-group-flush border-bottom scrollarea">
 
                 <div th:each="transaction: ${transactions}" class="mb-4">
-                    <div th:if="${transaction.receiver.id == user.id}">
-                        <div class="d-flex">
-                            <i  class="bi bi-arrow-left-short"></i>
-                            <div th:if="${transaction.debtor != null}">
-                                <span th:text="${transaction.debtor.firstName}"></span>
+                    <div th:if="${transaction.receiver != null}">
+                        <div th:if="${transaction.receiver.id == user.id}">
+                            <div class="d-flex">
+                                <i  class="bi bi-arrow-left-short"></i>
+                                <div th:if="${transaction.debtor != null}">
+                                    <span th:text="${transaction.debtor.firstName}"></span>
+                                </div>
+                                <div th:unless="${transaction.debtor != null}">
+                                    <span>You</span>
+                                </div>
                             </div>
-                            <div th:unless="${transaction.debtor != null}">
-                                <span>You</span>
-                            </div>
+                                <div th:text="${#numbers.formatDecimal(transaction.amount,1,2)} +'€'"></div>
                         </div>
-                            <div th:text="${#numbers.formatDecimal(transaction.amount,1,2)} +'€'"></div>
+                        <div th:unless="${transaction.receiver.id == user.id}">
+                            <div class="d-flex">
+                                <i  class="bi bi-arrow-right-short"></i>
+                                <div th:if="${transaction.debtor != null}">
+                                    <span th:text="${transaction.receiver.firstName}"></span>
+                                </div>
+                                <div th:unless="${transaction.debtor != null}">
+                                    <span>You</span>
+                                </div>
+                            </div>
+                                <div th:text="${#numbers.formatDecimal(transaction.amount,1,2)} +'€'"></div>
+                        </div>
                     </div>
-                    <div th:unless="${transaction.receiver.id == user.id}">
+                    <div th:unless="${transaction.receiver != null}">
                         <div class="d-flex">
                             <i  class="bi bi-arrow-right-short"></i>
-                            <div th:if="${transaction.debtor != null}">
-                                <span th:text="${transaction.receiver.firstName}"></span>
-                            </div>
-                            <div th:unless="${transaction.debtor != null}">
                                 <span>You</span>
-                            </div>
                         </div>
-                            <div th:text="${#numbers.formatDecimal(transaction.amount,1,2)} +'€'"></div>
+                        <div th:text="${#numbers.formatDecimal(transaction.amount,1,2)} +'€'"></div>
                     </div>
+
+
+
+
                 </div>
             </div>
 
