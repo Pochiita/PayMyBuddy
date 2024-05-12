@@ -72,15 +72,15 @@
     <nav aria-label="...">
         <ul class="pagination">
             <li th:if="${pagination.containsKey('prev')}" class="page-item">
-                <a class="page-link" th:text="${pagination.prev + 1}"></a>
+                <a class="page-link" th:href="@{/profile/friendslist(limit=1,page=${pagination.prev})}" th:text="${pagination.prev + 1}"></a>
             </li>
 
 
             <li class="page-item active" aria-current="page" th:if="${pagination.current !=null}">
-                <a class="page-link" th:text="${pagination.current + 1}" href="#"></a>
+                <a class="page-link" th:href="@{/profile/friendslist(limit=1,page=${pagination.current})}" th:text="${pagination.current + 1}" href="#"></a>
             </li>
             <li th:if="${pagination.containsKey('next')}" class="page-item">
-                <a class="page-link" th:text="${pagination.next + 1}"></a>
+                <a class="page-link" th:href="@{/profile/friendslist(limit=1,page=${pagination.next})}" th:text="${pagination.next + 1}"></a>
             </li>
         </ul>
     </nav>
