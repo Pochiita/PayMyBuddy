@@ -4,14 +4,17 @@ import com.paymybuddy.pochiita.dto.TransactionAddBalanceDTO;
 import com.paymybuddy.pochiita.model.Transaction;
 import com.paymybuddy.pochiita.model.User;
 import com.paymybuddy.pochiita.repository.AccountRepository;
+import com.paymybuddy.pochiita.repository.TransactionRepository;
 import com.paymybuddy.pochiita.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,13 +27,12 @@ public class TransactionService {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    TransactionRepository transactionRepository;
+
     public boolean is_transaction_possible(double amount){
-        String username = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username=((UserDetails) principal).getUsername();
-        }
-        User user = userRepository.findByEmail(username);
+
+        User user =get_connected_user();
 
         if (user.getAccount().getBalance() < amount){
             return false;
@@ -40,13 +42,7 @@ public class TransactionService {
     }
 
     public boolean create_transaction (long receiver_id, double amount,String description ){
-        String username = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username=((UserDetails) principal).getUsername();
-        }
-
-        User user = userRepository.findByEmail(username);
+             User user =get_connected_user();
         Optional<User> optional_to_add = userRepository.findById(receiver_id);
 
         if ( user != null && optional_to_add.isPresent()){
@@ -91,13 +87,7 @@ public class TransactionService {
     }
 
     public boolean add_money(TransactionAddBalanceDTO transactionAddBalanceDTO){
-        String username = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username=((UserDetails) principal).getUsername();
-        }
-
-        User user = userRepository.findByEmail(username);
+        User user = get_connected_user();
         if (user != null){
             Transaction transaction = new Transaction();
             transaction.setAmount(transactionAddBalanceDTO.getAmount());
@@ -117,13 +107,9 @@ public class TransactionService {
     }
 
     public boolean receive_money(TransactionAddBalanceDTO transactionAddBalanceDTO){
-        String username = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username=((UserDetails) principal).getUsername();
-        }
 
-        User user = userRepository.findByEmail(username);
+
+        User user = get_connected_user();
         if (user != null){
             Transaction transaction = new Transaction();
             transaction.setAmount(transactionAddBalanceDTO.getAmount());
@@ -140,5 +126,37 @@ public class TransactionService {
         }else{
             return false;
         }
+    }
+
+    public List<Transaction> get_all_transactions (int offset,int page){
+
+       User user = get_connected_user();
+
+        return transactionRepository.findTransactionsByDebtorAndReceiver(user.getId(), PageRequest.of(page, offset));
+    }
+
+    public HashMap<String, Integer> handlePagination (int actual_page, int offset, int totalElts){
+        int max_pages = (int) Math.ceil(totalElts /offset);
+        HashMap<String,Integer> available_indexes = new HashMap<>();
+        if (actual_page >0){
+            available_indexes.put("prev",actual_page-1);
+        }
+
+        available_indexes.put("current",actual_page);
+
+        if (actual_page < max_pages-1){
+            available_indexes.put("next",actual_page+1);
+        }
+        return available_indexes;
+    }
+
+    public User get_connected_user (){
+        String username = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username=((UserDetails) principal).getUsername();
+        }
+
+        return userRepository.findByEmail(username);
     }
 }

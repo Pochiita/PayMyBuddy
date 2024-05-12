@@ -96,4 +96,12 @@ public class TransactionController {
             return "redirect:/profile/transaction/balance/receive?fail";
         }
     }
+
+    @GetMapping("/profile/transaction/all")
+    public String transaction_show_all (Model model, @RequestParam(value = "page") int page,@RequestParam(value="offset") int offset){
+        model.addAttribute("user",transactionService.get_connected_user());
+        model.addAttribute("transactions",transactionService.get_all_transactions(offset,page));
+        model.addAttribute("pagination",transactionService.handlePagination(page,offset,transactionService.get_connected_user().getAccount().getTransactionList().size()));
+        return "transactionDisplayAll.html";
+    }
 }
