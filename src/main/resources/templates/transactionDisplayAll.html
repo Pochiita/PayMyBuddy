@@ -35,42 +35,60 @@
         </div>
     </div>
 </nav>
-<div th:if="${param.success}">
-    <div class="alert alert-info">
-        The transaction got correctly created.
-    </div>
-</div>
-<div th:if="${param.fail}">
-    <div class="alert alert-danger">
-        The transaction couldn't be created .Please try later
-    </div>
-</div>
-<div th:if="${param.amount}">
-    <div class="alert alert-danger">
-        Not enough money on your account to create this transaction.
-    </div>
-</div>
+
 <div class="container mt-4">
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between align-items-center flex-column">
 
-
-
-        <div class="shadow rounded m-3 p-3 w-50">
-            <p>Receive money</p>
-            <div class="list-group list-group-flush border-bottom scrollarea">
-
-                <form method="post" role="form" th:action="@{/profile/transaction/balance/receive}" th:object="${transaction}" class="my-5">
-
-                    <div class="mb-3">
-                        <label for="amount" class="form-label">Amount</label>
-                        <input type="number" step="0.01" class="form-control" id="amount" name="amount" th:field="*{amount}" placeholder="Amount">
-                    </div>
-
-                    <div class="form-group">
-                        <button class="btn btn-primary" type="submit">Add balance</button>
-                    </div>
-                </form>
+        <div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Select a friend
+                </button>
+                <ul th:if="${#lists.isEmpty(user.friendsList)}"class="dropdown-menu">
+                    <li >
+                        <a class="dropdown-item" th:href="@{/profile/friendslist?page=0&limit=5}" >Add a friend</a>
+                    </li>
+                </ul>
+                <ul th:unless="${#lists.isEmpty(user.friendsList)}"class="dropdown-menu">
+                    <li th:each="friend : ${user.friendsList}">
+                        <a class="dropdown-item" th:text="${friend.email}" th:href="@{/profile/transactionadd(f=${friend.id})}"></a>
+                    </li>
+                </ul>
             </div>
+        </div>
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Connection</th>
+                <th scope="col">Description</th>
+                <th scope="col">Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <th scope="row" th:text="${transaction.receiver} ? ${transaction.receiver.email} : ${transaction.debtor.email   }"></th>
+                <td th:text="${transaction.description}"></td>
+                <td th:text="${transaction.amount}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li th:if="${pagination.containsKey('prev')}" class="page-item">
+                    <a class="page-link" th:href="@{/profile/transaction/all(offset=5,page=${pagination.prev})}" th:text="${pagination.prev + 1}"></a>
+                </li>
+                <li class="page-item active" aria-current="page" th:if="${pagination.current !=null}">
+                    <a class="page-link" th:href="@{/profile/transaction/all(offset=5,page=${pagination.current})}" th:text="${pagination.current + 1}" href="#"></a>
+                </li>
+                <li th:if="${pagination.containsKey('next')}" class="page-item">
+                    <a class="page-link" th:href="@{/profile/transaction/all(offset=5,page=${pagination.next})}" th:text="${pagination.next + 1}"></a>
+                </li>
+            </ul>
+        </nav>
+
         </div>
     </div>
 

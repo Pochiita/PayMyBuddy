@@ -13,8 +13,8 @@ import java.util.List;
 
 public interface TransactionRepository  extends JpaRepository<Transaction,Long> {
 
-    @Query("SELECT t FROM Transaction t WHERE t.debtor.id = :userId AND t.receiver.id = :userId")
-    List<Transaction> findTransactionsByDebtorAndReceiver(Long userId, Pageable pageable);
+    @Query("SELECT t FROM Transaction t WHERE debtor.id = :userId OR receiver.id = :userId")
+    List<Transaction> findTransactionsByDebtorAndReceiver(@Param("userId") Long userId, Pageable pageable);
 
 
 }

@@ -130,8 +130,7 @@ public class TransactionService {
 
     public List<Transaction> get_all_transactions (int offset,int page){
 
-       User user = get_connected_user();
-
+        User user = get_connected_user();
         return transactionRepository.findTransactionsByDebtorAndReceiver(user.getId(), PageRequest.of(page, offset));
     }
 
@@ -144,7 +143,7 @@ public class TransactionService {
 
         available_indexes.put("current",actual_page);
 
-        if (actual_page < max_pages-1){
+        if (actual_page < max_pages){
             available_indexes.put("next",actual_page+1);
         }
         return available_indexes;
