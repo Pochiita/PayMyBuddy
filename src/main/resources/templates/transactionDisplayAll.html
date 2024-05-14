@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="">
 <head>
     <meta charset="UTF-8">
     <title>Add balance</title>
@@ -14,13 +14,12 @@
             <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
         </a>
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="#" class="nav-link px-2 link-body-emphasis">Overview</a></li>
-            <li><a href="#" class="nav-link px-2 link-body-emphasis">Inventory</a></li>
-            <li><a href="#" class="nav-link px-2 link-body-emphasis">Customers</a></li>
-            <li><a href="#" class="nav-link px-2 link-body-emphasis">Products</a></li>
+            <li><a  class="nav-link px-2 link-body-emphasis" th:href="@{/profile/summary}">Home</a></li>
+            <li><a  class="nav-link px-2 link-body-emphasis"  th:href="@{/profile/friends}">Friends</a></li>
+            <li><a class="nav-link px-2 link-body-emphasis" th:href="@{/profile/transaction/all?offset=5&page=0}">Transactions</a></li>
+            <li><a th:href="@{/profile/friendslist?page=0&limit=10}" class="nav-link px-2 link-body-emphasis">Add a contact</a></li>
         </ul>
     </div>
-
     <div sec:authorize="isAuthenticated()">
         <div class="dropstart mx-3">
             <a class="d-block link-body-emphasis text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,21 +38,22 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center flex-column">
 
-        <div>
-            <div class="dropdown">
+        <div class="d-flex mb-3">
+            <select class="form-select selector" aria-label="Default select example">
                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Select a friend
-                </button>
+
                 <ul th:if="${#lists.isEmpty(user.friendsList)}"class="dropdown-menu">
                     <li >
-                        <a class="dropdown-item" th:href="@{/profile/friendslist?page=0&limit=5}" >Add a friend</a>
+                        <option class="dropdown-item" th:href="@{/profile/friendslist?page=0&limit=5}" >Add a friend</option>
                     </li>
                 </ul>
                 <ul th:unless="${#lists.isEmpty(user.friendsList)}"class="dropdown-menu">
-                    <li th:each="friend : ${user.friendsList}">
-                        <a class="dropdown-item" th:text="${friend.email}" th:href="@{/profile/transactionadd(f=${friend.id})}"></a>
-                    </li>
+                    <option th:each="friend : ${user.friendsList}" th:value="${friend.id}" th:text="${friend.firstName} +' '+ ${friend.lastName}" ></option>
                 </ul>
+                </select>
+
+            <div>
+                <a class="mx-3 btn btn-secondary link-friend w-100" href="">Create a transaction</a>
             </div>
         </div>
 
@@ -95,5 +95,29 @@
 </div>
 
 </body>
+
+<script>
+    let selector = document.querySelector('.selector');
+    let link = document.querySelector('.link-friend');
+    link.classList.add("disabled");
+    console.log(selector.value);
+    let isnum = /^\d+$/.test(selector.value);
+    if (isnum){
+        link.href ="/profile/transactionadd?f="+selector.value;
+        link.classList.remove("disabled");
+    }else{
+        link.textContent = "Add a friend";
+        link.href="/profile/friendslist?page=0&limit=10";
+        link.classList.remove("disabled");
+    }
+
+    selector.addEventListener('change',(e)=>{
+    let isnum = /^\d+$/.test(e.target.value);
+    if (isnum){
+        link.href ="/profile/transactionadd?f="+e.target.value;
+        }
+    });
+    console.log(selector);
+</script>
 </html>
 

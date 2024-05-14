@@ -14,13 +14,12 @@
             <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
         </a>
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="#" class="nav-link px-2 link-body-emphasis">Overview</a></li>
-            <li><a href="#" class="nav-link px-2 link-body-emphasis">Inventory</a></li>
-            <li><a href="#" class="nav-link px-2 link-body-emphasis">Customers</a></li>
-            <li><a href="#" class="nav-link px-2 link-body-emphasis">Products</a></li>
+            <li><a  class="nav-link px-2 link-body-emphasis" th:href="@{/profile/summary}">Home</a></li>
+            <li><a  class="nav-link px-2 link-body-emphasis"  th:href="@{/profile/friends}">Friends</a></li>
+            <li><a class="nav-link px-2 link-body-emphasis" th:href="@{/profile/transaction/all?offset=5&page=0}">Transactions</a></li>
+            <li><a th:href="@{/profile/friendslist?page=0&limit=10}" class="nav-link px-2 link-body-emphasis">Add a contact</a></li>
         </ul>
     </div>
-
     <div sec:authorize="isAuthenticated()">
         <div class="dropstart mx-3">
             <a class="d-block link-body-emphasis text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -72,15 +71,15 @@
     <nav aria-label="...">
         <ul class="pagination">
             <li th:if="${pagination.containsKey('prev')}" class="page-item">
-                <a class="page-link" th:href="@{/profile/friendslist(limit=1,page=${pagination.prev})}" th:text="${pagination.prev + 1}"></a>
+                <a class="page-link" th:href="@{/profile/friendslist(limit=10,page=${pagination.prev})}" th:text="${pagination.prev + 1}"></a>
             </li>
 
 
             <li class="page-item active" aria-current="page" th:if="${pagination.current !=null}">
-                <a class="page-link" th:href="@{/profile/friendslist(limit=1,page=${pagination.current})}" th:text="${pagination.current + 1}" href="#"></a>
+                <a class="page-link" th:href="@{/profile/friendslist(limit=10,page=${pagination.current})}" th:text="${pagination.current + 1}" href="#"></a>
             </li>
             <li th:if="${pagination.containsKey('next')}" class="page-item">
-                <a class="page-link" th:href="@{/profile/friendslist(limit=1,page=${pagination.next})}" th:text="${pagination.next + 1}"></a>
+                <a class="page-link" th:href="@{/profile/friendslist(limit=10,page=${pagination.next})}" th:text="${pagination.next + 1}"></a>
             </li>
         </ul>
     </nav>
