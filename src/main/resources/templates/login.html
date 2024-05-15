@@ -33,11 +33,12 @@
         </div>
     </div>
 </nav>
+<div class="container d-flex justify-content-center">
     <form
             method="post"
             role="form"
             action="/login"
-            class="form-horizontal"
+            class="form-horizontal w-50"
     >
         <div th:if="${message}" class="alert alert-error">
             <span th:text="${message}"></span>
@@ -70,5 +71,6 @@
                                 </span>
         </div>
     </form>
+</div>
 </body>
 </html>

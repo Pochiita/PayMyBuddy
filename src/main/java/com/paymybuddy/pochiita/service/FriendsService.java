@@ -88,7 +88,7 @@ public class FriendsService {
     }
 
     public HashMap<String, Integer> handlePagination (int actual_page, int offset, int totalElts){
-        int max_pages = (int) Math.ceil(totalElts /offset);
+        int max_pages = (int) Math.ceil((double)totalElts /(double)offset);
         System.out.println(max_pages);
         HashMap<String,Integer> available_indexes = new HashMap<>();
         if (actual_page >0){
@@ -97,10 +97,9 @@ public class FriendsService {
 
         available_indexes.put("current",actual_page);
 
-        if (actual_page < max_pages-1){
+        if (actual_page+1 < max_pages){
             available_indexes.put("next",actual_page+1);
         }
-        System.out.println(available_indexes);
         return available_indexes;
     }
 }

@@ -91,7 +91,7 @@ public class TransactionService {
         if (user != null){
             Transaction transaction = new Transaction();
             transaction.setAmount(transactionAddBalanceDTO.getAmount());
-            transaction.setDescription("Added credit" + LocalDate.now());
+            transaction.setDescription("Added credit " + LocalDate.now());
             transaction.setReceiver(user);
             transaction.setDebtor(null);
 
@@ -113,7 +113,7 @@ public class TransactionService {
         if (user != null){
             Transaction transaction = new Transaction();
             transaction.setAmount(transactionAddBalanceDTO.getAmount());
-            transaction.setDescription("Added credit" + LocalDate.now());
+            transaction.setDescription("Withdrawn credit " + LocalDate.now());
             transaction.setReceiver(null);
             transaction.setDebtor(user);
 
@@ -135,7 +135,11 @@ public class TransactionService {
     }
 
     public HashMap<String, Integer> handlePagination (int actual_page, int offset, int totalElts){
-        int max_pages = (int) Math.ceil(totalElts /offset);
+        int max_pages = (int) Math.ceil((double)totalElts /(double)offset);
+        System.out.println(totalElts);
+        System.out.println(offset);
+        System.out.println(totalElts/offset);
+        System.out.println(max_pages);
         HashMap<String,Integer> available_indexes = new HashMap<>();
         if (actual_page >0){
             available_indexes.put("prev",actual_page-1);
@@ -143,7 +147,7 @@ public class TransactionService {
 
         available_indexes.put("current",actual_page);
 
-        if (actual_page < max_pages){
+        if (actual_page+1 < max_pages){
             available_indexes.put("next",actual_page+1);
         }
         return available_indexes;

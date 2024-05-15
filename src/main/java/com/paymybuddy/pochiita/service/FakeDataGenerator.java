@@ -37,7 +37,7 @@ public class FakeDataGenerator {
 
         User user = userRepository.findByEmail("test@test.com");
         User coming_user = userRepository.findByEmail("test1@test.com");
-        if (nbrUsers < 10){
+        if (nbrUsers < 20){
             for(int i = 0;i<10-nbrUsers;i++){
                 UserDTO userDTO = new UserDTO();
                 userDTO.setFirstName(faker.address().firstName());

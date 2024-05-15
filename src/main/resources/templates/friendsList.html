@@ -45,15 +45,15 @@
     </div>
 </div>
 <div class="container mt-4">
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-center">
 
 
-        <div class="shadow rounded m-3 p-3 w-50">
+        <div class="shadow rounded m-3 p-3 w-100">
             <p class="my-3">Add a friend</p>
             <div class="list-group list-group-flush border-bottom scrollarea">
 
                 <div th:each="user_available: ${available_friends}">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between mb-3">
                         <div class="credentials d-flex ">
                             <div th:text="${user_available.firstName}"></div>
                             <div th:text="${user_available.lastName}" class="ml-2"></div>
@@ -68,7 +68,7 @@
     </div>
 
 </div>
-    <nav aria-label="...">
+    <nav aria-label="..." class="d-flex justify-content-center">
         <ul class="pagination">
             <li th:if="${pagination.containsKey('prev')}" class="page-item">
                 <a class="page-link" th:href="@{/profile/friendslist(limit=10,page=${pagination.prev})}" th:text="${pagination.prev + 1}"></a>
