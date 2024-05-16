@@ -3,10 +3,10 @@
 ## Projet Openclassroom-6 : Conception d'une application web Java de A à Z
 
 <h2>Modèle physique des données :</h2>
-![Model Physique des Données](https://github.com/Pochiita/PayMyBuddy/blob/dev/img/model_db.png?raw=true)
+![Model Physique des Données](https://raw.githubusercontent.com/Pochiita/PayMyBuddy/dev/img/db.png)
 
 <h2>Diagramme UML</h2>
-![Diagramme UML](https://github.com/Pochiita/PayMyBuddy/blob/dev/img/diagramme_uml.png?raw=true)
+![Diagramme UML](https://raw.githubusercontent.com/Pochiita/PayMyBuddy/dev/img/uml.png)
 
 [Lien vers le script SQL](./img/dump.sql "Telecharger le script SQL")
 
