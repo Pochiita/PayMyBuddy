@@ -23,6 +23,7 @@ public class SummaryController {
     @Autowired
     TransactionRepository transactionRepository;
 
+
     @GetMapping("/profile/summary")
     public String summary (Principal principal,Model model){
         try {

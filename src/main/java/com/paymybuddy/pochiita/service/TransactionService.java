@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -131,15 +132,13 @@ public class TransactionService {
     public List<Transaction> get_all_transactions (int offset,int page){
 
         User user = get_connected_user();
-        return transactionRepository.findTransactionsByDebtorAndReceiver(user.getId(), PageRequest.of(page, offset));
+        List<Transaction> base_list =  transactionRepository.findTransactionsByDebtorAndReceiver(user.getId(), PageRequest.of(page, offset));
+        List<Transaction> to_return = user.getAccount().getTransactionList().subList(offset*page,offset*page+offset);
+        return get_only_user_transactions(base_list,user.getAccount().getTransactionList());
     }
 
     public HashMap<String, Integer> handlePagination (int actual_page, int offset, int totalElts){
         int max_pages = (int) Math.ceil((double)totalElts /(double)offset);
-        System.out.println(totalElts);
-        System.out.println(offset);
-        System.out.println(totalElts/offset);
-        System.out.println(max_pages);
         HashMap<String,Integer> available_indexes = new HashMap<>();
         if (actual_page >0){
             available_indexes.put("prev",actual_page-1);
@@ -161,5 +160,10 @@ public class TransactionService {
         }
 
         return userRepository.findByEmail(username);
+    }
+
+    protected List<Transaction> get_only_user_transactions(List<Transaction> base_collection,List<Transaction> to_compare){
+        System.out.println(base_collection.stream().filter(to_compare::contains).collect(Collectors.toList()).size());
+        return base_collection.stream().filter(to_compare::contains).collect(Collectors.toList());
     }
 }

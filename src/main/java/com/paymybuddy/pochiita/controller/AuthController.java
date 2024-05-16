@@ -5,6 +5,7 @@ import com.paymybuddy.pochiita.model.User;
 import com.paymybuddy.pochiita.service.UserAuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +23,9 @@ public class AuthController {
     public String signup(Model model){
         UserDTO user = new UserDTO();
         model.addAttribute("user",user);
+       
         return "signup";
+
     }
 
 
@@ -48,6 +51,7 @@ public class AuthController {
     // handler method to handle login request
     @GetMapping("/login")
     public String login(){
+
         return "login";
     }
 

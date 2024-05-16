@@ -32,7 +32,8 @@ public class TransactionController {
     public String transaction_add (Model model, @Valid @ModelAttribute("transaction") TransactionAddDTO transactionAddDTO, BindingResult result, @RequestParam(value = "f") long friend){
         if (result.hasErrors() || result.hasFieldErrors()){
             model.addAttribute("transaction",transactionAddDTO);
-            return "transactionAdd.html";
+            return "redirect:/profile/transactionadd?f="+friend+"&amount";
+
         }
 
         if (!transactionService.is_transaction_possible(transactionAddDTO.getAmount())){
@@ -44,7 +45,6 @@ public class TransactionController {
             return "redirect:/profile/transactionadd?f="+friend+"&success";
         }else{
             return "redirect:/profile/transactionadd?f="+friend+"&fail";
-
         }
 
     }
@@ -101,7 +101,7 @@ public class TransactionController {
     public String transaction_show_all (Model model, @RequestParam(value = "page") int page,@RequestParam(value="offset") int offset){
         model.addAttribute("user",transactionService.get_connected_user());
         model.addAttribute("transactions",transactionService.get_all_transactions(offset,page));
-        model.addAttribute("pagination",transactionService.handlePagination(page,offset,transactionService.get_connected_user().getAccount().getTransactionList().size()));
+        model.addAttribute("pagination",transactionService.handlePagination(page,offset,transactionService.get_all_transactions(offset, page).size()));
         return "transactionDisplayAll.html";
     }
 }
