@@ -32,13 +32,12 @@ public class TransactionController {
     public String transaction_add (Model model, @Valid @ModelAttribute("transaction") TransactionAddDTO transactionAddDTO, BindingResult result, @RequestParam(value = "f") long friend){
         if (result.hasErrors() || result.hasFieldErrors()){
             model.addAttribute("transaction",transactionAddDTO);
-            return "redirect:/profile/transactionadd?f="+friend+"&amount";
-
+            model.addAttribute("id",friend);
+            return "transactionAdd.html";
         }
 
         if (!transactionService.is_transaction_possible(transactionAddDTO.getAmount())){
-            return "redirect:/profile/transactionadd?f="+friend+"&amount";
-
+            return "redirect:/profile/transactionadd?f="+friend+"&credit";
         }
 
         if(transactionService.create_transaction(friend,transactionAddDTO.getAmount(),transactionAddDTO.getDescription())){
@@ -87,7 +86,7 @@ public class TransactionController {
         }
 
         if (!transactionService.is_transaction_possible(transactionAddDTO.getAmount())){
-            return "redirect:/profile/transaction/balance/receive?amount";
+            return "redirect:/profile/transaction/balance/receive?credit";
         }
 
         if(transactionService.receive_money(transactionAddDTO)){
@@ -99,9 +98,33 @@ public class TransactionController {
 
     @GetMapping("/profile/transaction/all")
     public String transaction_show_all (Model model, @RequestParam(value = "page") int page,@RequestParam(value="offset") int offset){
+        TransactionAddBalanceDTO transac_form = new TransactionAddBalanceDTO();
+        model.addAttribute("transac_form",transac_form);
         model.addAttribute("user",transactionService.get_connected_user());
         model.addAttribute("transactions",transactionService.get_all_transactions(offset,page));
         model.addAttribute("pagination",transactionService.handlePagination(page,offset,transactionService.get_connected_user().getAccount().getTransactionList().size()));
         return "transactionDisplayAll.html";
+    }
+
+    @PostMapping("/profile/transaction/quick")
+    public String transaction_quick (@Valid @ModelAttribute("transac_form") TransactionAddBalanceDTO transactionAddDTO,BindingResult result,Model model, @RequestParam(value="f") long id){
+        if (result.hasErrors() || result.hasFieldErrors()){
+            model.addAttribute("transac_form",transactionAddDTO);
+            model.addAttribute("user",transactionService.get_connected_user());
+            model.addAttribute("transactions",transactionService.get_all_transactions(5,0));
+            model.addAttribute("pagination",transactionService.handlePagination(0,5,transactionService.get_connected_user().getAccount().getTransactionList().size()));
+
+            return "transactionDisplayAll.html";
+        }
+
+        if (!transactionService.is_transaction_possible(transactionAddDTO.getAmount())){
+            return "redirect:/profile/transaction/all?offset=5&page=0&credit";
+        }
+
+        if(transactionService.quick_add_money(transactionAddDTO,id)){
+            return "redirect:/profile/transaction/all?offset=5&page=0&success";
+        }else{
+            return "redirect:/profile/transaction/all?offset=5&page=0&fail";
+        }
     }
 }

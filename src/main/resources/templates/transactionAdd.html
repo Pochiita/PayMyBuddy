@@ -45,7 +45,7 @@
         The transaction couldn't be created .Please try later
     </div>
 </div>
-<div th:if="${param.amount}">
+<div th:if="${param.credit}">
     <div class="alert alert-danger">
         Not enough money on your account to create this transaction.
     </div>
@@ -55,7 +55,7 @@
 
 
         <div class="shadow rounded m-3 p-3 w-50">
-            <p>Friends List</p>
+            <p>Transaction</p>
             <div class="list-group list-group-flush border-bottom scrollarea">
                 <form method="post" role="form" th:action="@{/profile/transaction/add(f=${id})}" th:object="${transaction}" class="my-5">
 
@@ -63,17 +63,23 @@
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control" id="description" name="description" th:field="*{description}" placeholder="Description">
+                        <p th:errors = "*{description}" class="text-danger"
+                           th:if="${#fields.hasErrors('description')}"></p>
                     </div>
 
                     <div class="mb-3">
                         <label for="amount" class="form-label">Amount</label>
                         <input type="number" step="0.01" class="form-control" id="amount" name="amount" th:field="*{amount}" placeholder="Amount">
+                        <p th:errors = "*{amount}" class="text-danger"
+                           th:if="${#fields.hasErrors('amount')}"></p>
                     </div>
 
                     <div class="form-group">
                         <button class="btn btn-primary" type="submit">Send</button>
                     </div>
-                </form>            </div>
+
+                </form>
+            </div>
         </div>
     </div>
 

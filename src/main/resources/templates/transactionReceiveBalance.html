@@ -44,7 +44,7 @@
         The transaction couldn't be created .Please try later
     </div>
 </div>
-<div th:if="${param.amount}">
+<div th:if="${param.credit}">
     <div class="alert alert-danger">
         Not enough money on your account to create this transaction.
     </div>
@@ -63,6 +63,8 @@
                     <div class="mb-3">
                         <label for="amount" class="form-label">Amount</label>
                         <input type="number" step="0.01" class="form-control" id="amount" name="amount" th:field="*{amount}" placeholder="Amount">
+                        <p th:errors = "*{amount}" class="text-danger"
+                           th:if="${#fields.hasErrors('amount')}"></p>
                     </div>
 
                     <div class="form-group">

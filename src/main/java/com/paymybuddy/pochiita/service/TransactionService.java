@@ -35,11 +35,7 @@ public class TransactionService {
 
         User user =get_connected_user();
 
-        if (user.getAccount().getBalance() < amount){
-            return false;
-        }else{
-            return true;
-        }
+        return !(user.getAccount().getBalance() < amount);
     }
 
     public boolean create_transaction (long receiver_id, double amount,String description ){
@@ -109,7 +105,7 @@ public class TransactionService {
 
     public boolean receive_money(TransactionAddBalanceDTO transactionAddBalanceDTO){
 
-
+        System.out.println(transactionAddBalanceDTO.getAmount());
         User user = get_connected_user();
         if (user != null){
             Transaction transaction = new Transaction();
@@ -167,7 +163,30 @@ public class TransactionService {
     }
 
     protected List<Transaction> get_only_user_transactions(List<Transaction> base_collection,List<Transaction> to_compare){
-        System.out.println(base_collection.stream().filter(to_compare::contains).collect(Collectors.toList()).size());
         return base_collection.stream().filter(to_compare::contains).collect(Collectors.toList());
+    }
+
+    public boolean quick_add_money(TransactionAddBalanceDTO transactionAddBalanceDTO,long receiver_id){
+        User user = get_connected_user();
+
+        Optional<User> optional_to_add = userRepository.findById(receiver_id);
+
+        if (user != null && optional_to_add.isPresent()){
+            User to_add_verified = optional_to_add.orElseThrow();
+            Transaction transaction = new Transaction();
+            transaction.setAmount(transactionAddBalanceDTO.getAmount());
+            transaction.setDescription("Quick transaction " + LocalDate.now());
+            transaction.setReceiver(to_add_verified);
+            transaction.setDebtor(user);
+
+            add_transaction_to_user(user,transaction);
+            add_transaction_to_user(to_add_verified,transaction);
+
+            //Manage balance for the two users
+            manage_balance(to_add_verified,user, transactionAddBalanceDTO.getAmount());
+            return true;
+        }else{
+            return false;
+        }
     }
 }

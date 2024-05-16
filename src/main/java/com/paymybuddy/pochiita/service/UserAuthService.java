@@ -61,9 +61,7 @@ public class UserAuthService {
             // TODO Auto-generated method stub
             User user = userRepository.findByEmail(email);
             if (user != null) {
-                if (passwordEncoder.matches(password, user.getPassword())) {
-                    return true;
-                }
+                return passwordEncoder.matches(password, user.getPassword());
             }
             return false;
 
