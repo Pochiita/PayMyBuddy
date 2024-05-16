@@ -132,9 +132,13 @@ public class TransactionService {
     public List<Transaction> get_all_transactions (int offset,int page){
 
         User user = get_connected_user();
-        List<Transaction> base_list =  transactionRepository.findTransactionsByDebtorAndReceiver(user.getId(), PageRequest.of(page, offset));
-        List<Transaction> to_return = user.getAccount().getTransactionList().subList(offset*page,offset*page+offset);
-        return get_only_user_transactions(base_list,user.getAccount().getTransactionList());
+        int a = offset*page;
+        int b = offset +(offset*page);
+        if (b > user.getAccount().getTransactionList().size()){
+            b = user.getAccount().getTransactionList().size();
+        }
+        List<Transaction> sublist = user.getAccount().getTransactionList().subList(a,b);
+        return sublist;
     }
 
     public HashMap<String, Integer> handlePagination (int actual_page, int offset, int totalElts){
