@@ -18,7 +18,6 @@ public class SummaryService {
     @Autowired
     UserRepository userRepository;
 
-
     public User summary(Principal principal) throws Exception {
         String userMail = principal.getName();
         User user = userRepository.findByEmail(userMail);

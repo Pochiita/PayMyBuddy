@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -17,11 +18,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class FriendsService {
 
     @Autowired
     UserRepository userRepository;
-
     public User getUser(Principal principal) throws Exception {
         String userMail = principal.getName();
         User user = userRepository.findByEmail(userMail);
@@ -55,7 +56,6 @@ public class FriendsService {
             return false;
         }
     }
-
     public boolean removeAFriend(long friend_id) throws Exception {
 
         String username = null;
@@ -81,7 +81,6 @@ public class FriendsService {
             return false;
         }
     }
-
     public List<User> listOfAvailableFriend(User user,int page, int limit){
         List<User> list = userRepository.findAllUsersNotInFriendListAndNotOwnUser(user.getId(),user.getId(),PageRequest.of(page, limit));
         return list;
